@@ -13,3 +13,18 @@ group (do not include the cars at neighbor branches)
 8. Record the return of a car
 
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+NEED TO:
+- MODIFY USECASE CLASS TO TAKE VEC<> AS PRE- AND POST-CONDITION
+- SEPARATE QUERYING AND INSERTING METHODS FROM CLASSES 
+- SIMULATE DATABASE OPERATIONS 
+- ADD TEST CASES 
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+- Usecases are in Usecases.rs
+- Tests are in Test.rs, run by cargo Test
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
