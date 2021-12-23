@@ -3,6 +3,8 @@ use std::collections::HashMap;
 use crate::entity::entity::Creatable as Creatable;
 use crate::entity::entity::Queryable as Queryable;
 
+
+
 pub struct Customer {
 customername : String,
 phonenumber : String,
@@ -25,5 +27,11 @@ impl Queryable for Customer {
     }
 }
 
-impl Creatable for Customer {}
+impl Creatable for Customer {
+
+}
+
+
+
+
 }

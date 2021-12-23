@@ -1,22 +1,14 @@
 pub mod entity {
-    pub enum Errors {
-        POSTCONDITIONFAIL,
-        ALREADYEXIST,
-        DBERROR,
-    }
+    use std::collections::HashMap;
+
 
     pub trait Queryable {
 
         fn getqueryfield(&self) -> &String;
+
         fn queryobject(&self) -> Result<(), String> {Ok(())} 
         
         fn shouldexist(&self)  -> Result<(), String> {
-            //post_condition defaults to true
-/*             match self.entityNotExisted(){
-                Ok(false) => Ok(()),
-                Ok(true) => Err(String::from("not existed")),
-                Err(e) => Err(e),
-            } */
             Ok(())
         }
 
@@ -51,18 +43,6 @@ pub mod entity {
 
     }
 
-  /*   pub fn uc_addEntity(entity : &dyn Creatable) -> Result<(), String> {
-        let pre_condition = pre_addEntity(entity);
-        let action = match pre_condition {
-            Ok(()) => addEntity(entity),
-            Err(e) => Err(e),
-        };
-        let post_condition = match action {
-            Ok(()) => post_addEntity(entity),
-            Err(e) => Err(e),
-        };
-        post_condition
-    } */
 
 
 
