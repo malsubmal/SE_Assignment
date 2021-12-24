@@ -2,7 +2,7 @@ pub mod usecase {
     pub struct Usecase<'a>
     {
         precondition : &'a Fn() -> Result<(), String>,
-        action :  &'a Fn() -> Result<(), String>,
+        action :  &'a mut FnMut() -> Result<(), String>,
         postcondition :  &'a Fn() -> Result<(), String>,
     }
 
@@ -10,7 +10,7 @@ pub mod usecase {
     {
         pub fn new(
         precondition : &'a Fn() -> Result<(), String>,
-        action :  &'a Fn() -> Result<(), String>,
+        action :  &'a mut FnMut() -> Result<(), String>,
         postcondition :  &'a Fn() -> Result<(), String>
         ) -> Usecase<'a> {
             Usecase{
@@ -20,7 +20,7 @@ pub mod usecase {
             }
         }
 
-        pub fn run(&'a self) -> Result<(), String> {
+        pub fn run(&'a mut self) -> Result<(), String> {
             let action = match (self.precondition)() {
                 Ok(()) => (self.action)(),
                 Err(e) => Err(e),

@@ -13,19 +13,21 @@ pub mod entity {
         }
 
         fn entityNotExisted(&self) -> Result<bool, String> {
-            match self.getqueryfield().as_str() {
+/*             match self.getqueryfield().as_str() {
                 "existing" => Ok(false), 
                 "problem" => Err(String::from("problem querying database")),
                 _ => Ok(true),
-            }
+            } */
+            Ok(true)
         }
     
         fn shouldnotexist(&self) ->  Result<(), String> {
-                match self.entityNotExisted() {
+/*                 match self.entityNotExisted() {
                     Ok(true) => Ok(()),
                     Ok(false) => Err(String::from("already exists")),
                     Err(e) => Err(e),
-                }
+                } */
+                Ok(())
             }
     }
 
