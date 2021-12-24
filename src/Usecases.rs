@@ -119,5 +119,37 @@ pub mod usescases {
      Ok(())
  }
 
+ pub fn uc_queryCar_branch_rg(
+    db : &mockdb::CarDatabase,
+    db_branch: &mockdb::BranchDatabase,
+    db_rentalgroup: &mockdb::RentalGroupDatabase,
+    db_model: &mockdb::ModelDatabase,
+    branch_id : String,
+    rentalgroup_id : String) -> Result<Vec<Car>, String>  {
+
+
+         //precondition branch exists
+        match db_branch.query(branch_id.clone()) {
+            Some(_) => Ok(()),
+            None => Err(String::from("not exist yet")),
+        }?;
+        //precondition model exists
+        match db_rentalgroup.query(rentalgroup_id.clone()) {
+            Some(_) => Ok(()),
+            None => Err(String::from("not exist yet")),
+        }?; 
+
+        let cars :Vec<Car> = db.db
+                    .values()
+                    .filter(|car| car.getBranch().to_string() == branch_id &&
+                    db_model.query(car.getModel().to_string()).unwrap().getrentalgroup().to_string() == rentalgroup_id)
+                    .cloned()
+                    .collect();
+        Ok(cars)
+
+        //no post-condition
+
+    }
+
     
 }

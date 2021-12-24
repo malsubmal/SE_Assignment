@@ -5,6 +5,7 @@ pub mod car {
     use crate::model::model::Model as Model;
     use crate::branch::branch::Branch as Branch;
 
+    #[derive(Clone)]
     enum CarStatus {
         RENTREADY,
         SERVICENEEDED,
@@ -15,6 +16,7 @@ pub mod car {
         EXCEPTIONAL
     }
     
+    #[derive(Clone)]
     pub struct Car {
         registrationnumber : String,
         name : String,

@@ -51,7 +51,7 @@ pub mod mockdb {
 
     //MOCK CAR DATABASE
     pub struct CarDatabase {
-        db : HashMap<String, Car>,
+        pub db : HashMap<String, Car>,
     }
     
     impl CarDatabase {

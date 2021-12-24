@@ -128,4 +128,74 @@ pub mod test {
         assert_eq!(uc::uc_createCar(&mut db, c1, &db_branch, &db_model).is_err(),false);
     }
 
+    #[test]
+    fn test_uc_queryCar_branch_rentalgroup_fail_1() {
+        //BRANCH ID DOESNT EXIST
+       let db = mockdb::CarDatabase::getSampleDB();
+       let  db_branch = mockdb::BranchDatabase::getSampleDB();
+       let  db_rentalgroup = mockdb::RentalGroupDatabase::getSampleDB();
+       let  db_model = mockdb::ModelDatabase::getSampleDB();
+       let  branch_id = String::from("branchNO");
+       let rentalgroup_id = String::from("A");
+       assert_eq!(uc::uc_queryCar_branch_rg(
+        &db,
+        &db_branch,
+        &db_rentalgroup,
+        &db_model,
+        branch_id,
+        rentalgroup_id).is_err(), true);
+    }
+    #[test]
+    fn test_uc_queryCar_branch_rentalgroup_fail_2() {
+        //RENTAL GROUP DOESNT EXIST
+        let db = mockdb::CarDatabase::getSampleDB();
+        let  db_branch = mockdb::BranchDatabase::getSampleDB();
+        let  db_rentalgroup = mockdb::RentalGroupDatabase::getSampleDB();
+        let  db_model = mockdb::ModelDatabase::getSampleDB();
+        let  branch_id = String::from("branchA");
+        let rentalgroup_id = String::from("E");
+        assert_eq!(uc::uc_queryCar_branch_rg(
+            &db,
+            &db_branch,
+            &db_rentalgroup,
+            &db_model,
+         branch_id,
+         rentalgroup_id).is_err(), true);
+    }
+    #[test]
+    fn test_uc_queryCar_branch_rentalgroup_succ_1() {
+        //CASE: NO CARS
+        let db = mockdb::CarDatabase::getSampleDB();
+        let  db_branch = mockdb::BranchDatabase::getSampleDB();
+        let  db_rentalgroup = mockdb::RentalGroupDatabase::getSampleDB();
+        let  db_model = mockdb::ModelDatabase::getSampleDB();
+        let  branch_id = String::from("branchB");
+        let rentalgroup_id = String::from("B");
+        assert_eq!(uc::uc_queryCar_branch_rg(
+            &db,
+            &db_branch,
+            &db_rentalgroup,
+            &db_model,
+         branch_id,
+         rentalgroup_id).unwrap().len(), 0);
+    }
+    #[test]
+    fn test_uc_queryCar_branch_rentalgroup_succ_2() {
+        //CASE: YES CARS
+        let db = mockdb::CarDatabase::getSampleDB();
+        let  db_branch = mockdb::BranchDatabase::getSampleDB();
+        let  db_rentalgroup = mockdb::RentalGroupDatabase::getSampleDB();
+        let  db_model = mockdb::ModelDatabase::getSampleDB();
+        let  branch_id = String::from("branchA");
+        let rentalgroup_id = String::from("A");
+        assert_ne!(uc::uc_queryCar_branch_rg(
+         &db,
+         &db_branch,
+         &db_rentalgroup,
+         &db_model,
+         branch_id,
+         rentalgroup_id).unwrap().len(), 0);
+    }
+
+
 }
