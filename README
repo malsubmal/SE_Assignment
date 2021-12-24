@@ -1,3 +1,5 @@
+ I KNOW THE CODE IS SMELLY MY BRAIN IS SMALL AND MY MORTAL COIL TIRED DO NOT TALK TO ME ABOUT IT
+
 ~1. Add a branch
 
 2. Make a pair of branches neighbors to each other
@@ -7,7 +9,7 @@
 ~5. Add a car
 ~6. Add a customer
 
-7. List cars that are available at a specified branch and belong to a specified rental
+~7. List cars that are available at a specified branch and belong to a specified rental
 group (do not include the cars at neighbor branches)
 
 8. Record the return of a car
@@ -16,10 +18,7 @@ group (do not include the cars at neighbor branches)
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 NEED TO:
-- MODIFY USECASE CLASS TO TAKE VEC<> AS PRE- AND POST-CONDITION
-- SEPARATE QUERYING AND INSERTING METHODS FROM CLASSES 
-- SIMULATE DATABASE OPERATIONS 
-- ADD TEST CASES 
+- {im about to commit arson} {refer to the first line of this file}
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
