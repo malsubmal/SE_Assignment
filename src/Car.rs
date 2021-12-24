@@ -19,31 +19,36 @@ pub mod car {
         registrationnumber : String,
         name : String,
         yearofproduction : String,
-        branch : Branch,
+        branch : String,
         color : String,
         status : CarStatus,
-        model : Model,
+        model : String,
     }
 
     
     impl Car {
         pub fn new(        
             registrationnumber : String,
-            name : String,
-            yearofproduction : String,
-            branch : Branch,
-            color : String,
-            model : Model,) -> Car {
+            branch : String,
+            model : String,) -> Car {
                 let status = CarStatus::RENTREADY;
                 Car {
                     registrationnumber,
-                    name,
-                    yearofproduction,
+                    name : String::from("car-name"),
+                    yearofproduction : String::from("2004"),
                     branch,
-                    color,
-                    status,
+                    color : String::from("turquoise"),
+                    status : CarStatus::RENTREADY,
                     model,
                 }
+        }
+
+        pub fn getBranch(&self) -> &String {
+            &self.branch
+        }
+
+        pub fn getModel(&self) -> &String {
+            &self.model
         }
     }
 

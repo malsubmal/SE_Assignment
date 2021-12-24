@@ -2,7 +2,6 @@ pub mod model {
     use std::collections::HashMap;
     use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
-    use crate::rentalgroup::rentalgroup::RentalGroup as RentalGroup;
         
     pub enum ModelType {
         Automatic,
@@ -13,7 +12,7 @@ pub mod model {
     modelnumber : String,
     description : String,
     modeltype : ModelType,
-    modelgroup : RentalGroup,
+    rentalgroup : String,
     petrolconsumption : f32,
     numberofdoors : i32,
     }
@@ -21,16 +20,19 @@ pub mod model {
     impl Model {
         pub fn new(    
             modelnumber : String,
-            modeltype : ModelType,
-            modelgroup : RentalGroup) -> Model {
+            rentalgroup : String) -> Model {
             Model {
                 modelnumber ,
                 description : String::from("default description"),
-                modeltype ,
-                modelgroup ,
+                modeltype : ModelType::Automatic ,
+                rentalgroup ,
                 petrolconsumption : 4.0,
                 numberofdoors : 4,
                 }
+        }
+
+        pub fn getrentalgroup(&self) -> &String {
+            &self.rentalgroup
         }
     }
 

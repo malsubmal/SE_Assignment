@@ -42,4 +42,90 @@ pub mod test {
         assert_eq!(uc::uc_createRentalGroup(&mut db, c1).is_err(),false);
     }
 
+    
+    #[test]
+    fn test_uc_createBranch_fail() {
+        //CASE: ID ALREADY EXISTS
+        let mut db = mockdb::BranchDatabase::getSampleDB();
+        let c1 = Branch::new(String::from("A"), String::from("branchA"));
+        assert_eq!(uc::uc_createBranch(&mut db, c1).is_err(),true);
+    }
+
+    #[test]
+    fn test_uc_createBranch_success() {
+        //CASE: CREATED SUCCESSFULLY
+        let mut db = mockdb::BranchDatabase::getSampleDB();
+        let c1 = Branch::new(String::from("A"), String::from("branchC"));
+        assert_eq!(uc::uc_createBranch(&mut db, c1).is_err(),false);
+    }
+
+    #[test]
+    fn test_uc_createModel_fail() {
+        //CASE: ID ALREADY EXISTS
+        let sup_db = mockdb::RentalGroupDatabase::getSampleDB();
+        let mut db = mockdb::ModelDatabase::getSampleDB();
+        let c1 = Model::new(String::from("modelA"), String::from("A"));
+        assert_eq!(uc::uc_createModel(&mut db, c1, &sup_db).is_err(),true);
+    }
+
+    #[test]
+    fn test_uc_createModel_fail_2() {
+        //CASE: RENTALGROUP DOESNT EXIST
+        let  sup_db = mockdb::RentalGroupDatabase::getSampleDB();
+        let mut db = mockdb::ModelDatabase::getSampleDB();
+        let c1 = Model::new(String::from("modelD"), String::from("E"));
+        assert_eq!(uc::uc_createModel(&mut db, c1, &sup_db).is_err(),true);
+    }
+
+    #[test]
+    fn test_uc_createModel_success() {
+        //CASE: CREATED SUCCESSFULLY
+        let sup_db = mockdb::RentalGroupDatabase::getSampleDB();
+        let mut db = mockdb::ModelDatabase::getSampleDB();
+        let c1 = Model::new(String::from("modelD"), String::from("A"));
+        assert_eq!(uc::uc_createModel(&mut db, c1, &sup_db).is_err(),false);
+    }
+
+    
+
+    #[test]
+    fn test_uc_createCar_fail() {
+        //CASE: ID ALREADY EXISTS
+        let db_branch = mockdb::BranchDatabase::getSampleDB();
+        let db_model = mockdb::ModelDatabase::getSampleDB();
+        let mut db = mockdb::CarDatabase::getSampleDB();
+        let c1 = Car::new(String::from("carA"), String::from("branchA"), String::from("modelA"));
+        assert_eq!(uc::uc_createCar(&mut db, c1, &db_branch, &db_model).is_err(),true);
+    }
+
+    #[test]
+    fn test_uc_createCar_fail_2() {
+        //CASE: MODEL DOESNT EXIST
+        let db_branch = mockdb::BranchDatabase::getSampleDB();
+        let db_model = mockdb::ModelDatabase::getSampleDB();
+        let mut db = mockdb::CarDatabase::getSampleDB();
+        let c1 = Car::new(String::from("carD"), String::from("branchA"), String::from("Model_NO"));
+        assert_eq!(uc::uc_createCar(&mut db, c1, &db_branch, &db_model).is_err(),true);
+    }
+
+    #[test]
+    fn test_uc_createCar_fail_3() {
+        //CASE: BRANCH DOESNT EXIST
+        let db_branch = mockdb::BranchDatabase::getSampleDB();
+        let db_model = mockdb::ModelDatabase::getSampleDB();
+        let mut db = mockdb::CarDatabase::getSampleDB();
+        let c1 = Car::new(String::from("carD"), String::from("branchF"), String::from("modelA"));
+        assert_eq!(uc::uc_createCar(&mut db, c1, &db_branch, &db_model).is_err(),true);
+    }
+
+    #[test]
+    fn test_uc_createCar_success() {
+        //CASE: CREATED SUCCESSFULLY
+        let db_branch = mockdb::BranchDatabase::getSampleDB();
+        let db_model = mockdb::ModelDatabase::getSampleDB();
+        let mut db = mockdb::CarDatabase::getSampleDB();
+        let c1 = Car::new(String::from("carD"), String::from("branchA"), String::from("modelA"));
+        assert_eq!(uc::uc_createCar(&mut db, c1, &db_branch, &db_model).is_err(),false);
+    }
+
 }

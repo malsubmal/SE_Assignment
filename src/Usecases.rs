@@ -10,6 +10,7 @@ pub mod usescases {
 
 
 
+
     pub fn uc_createCustomer(db : &mut mockdb::CustomerDatabase, customer : Customer) -> Result<(), String> {
         let customer_id = customer.getqueryfield().to_string();
         //pre-condition
@@ -45,47 +46,78 @@ pub mod usescases {
         Ok(())
     }
 
+    pub fn uc_createBranch(db : &mut mockdb::BranchDatabase, item : Branch)
+    -> Result<(), String> {
+       let id = item.getqueryfield().to_string();
+       //pre-condition
+       match db.query(id.clone()) {
+           Some(_) =>  Err(String::from("already exists")),
+           None => Ok(()),
+       }?;
+       //action
+       db.insert(item)?;
+       //post-condition
+       match db.query(id.clone()) {
+           Some(_) => Ok(()),
+           None => Err(String::from("not exist yet")),
+       }?;
+       Ok(())
+   }
 
-/*
+   pub fn uc_createModel(db : &mut mockdb::ModelDatabase, item : Model, db_support: &mockdb::RentalGroupDatabase)
+   -> Result<(), String> {
+      let id = item.getqueryfield().to_string();
+      let rg = item.getrentalgroup().to_string();
+      //pre-condition id is new
+      match db.query(id.clone()) {
+          Some(_) =>  Err(String::from("already exists")),
+          None => Ok(()),
+      }?;
+      //pre-condition ModelGroup exists on database
+      match db_support.query(rg)  {
+        Some(_) => Ok(()),
+        None => Err(String::from("not exist yet")),
+    }?;
+      //action
+      db.insert(item)?;
+      //post-condition
+      match db.query(id.clone()) {
+          Some(_) => Ok(()),
+          None => Err(String::from("not exist yet")),
+      }?;
+      Ok(())
+  }
 
-    pub fn uc_createBranch(branch : Branch) ->  Result<(), String> {
-        let createBranch= Usecase::new(
-            &|| branch.shouldnotexist(),
-            &|| branch.addEntity(),
-            &|| branch.shouldexist()
-        ).run();
-        createBranch
-    }
-
-    pub fn uc_createRentalGroup(rgroup : RentalGroup) ->  Result<(), String> {
-        let createRGroup = Usecase::new(
-            &|| rgroup.shouldnotexist(),
-            &|| rgroup.addEntity(),
-            &|| rgroup.shouldexist()
-        ).run();
-        createRGroup
-    }
-
-    pub fn uc_createCar(car : Car) ->  Result<(), String> {
-        let createCar= Usecase::new(
-            &|| car.shouldnotexist(),
-            &|| car.addEntity(),
-            &|| car.shouldexist()
-        ).run();
-        createCar
-    }
-
-    pub fn uc_createModel(model : Model) ->  Result<(), String> {
-        let createModel= Usecase::new(
-            &|| model.shouldnotexist(),
-            &|| model.addEntity(),
-            &|| model.shouldexist()
-        ).run();
-        createModel
-    } */
-
-
-
+  pub fn uc_createCar(db : &mut mockdb::CarDatabase, item : Car,
+     db_branch: &mockdb::BranchDatabase, db_model: &mockdb::ModelDatabase)
+  -> Result<(), String> {
+     let id = item.getqueryfield().to_string();
+     let model_id = item.getModel().to_string();
+     let branch_id = item.getBranch().to_string();
+     //pre-condition id is new
+     match db.query(id.clone()) {
+         Some(_) =>  Err(String::from("already exists")),
+         None => Ok(()),
+     }?;
+     //pre-condition model exists on database
+     match db_model.query(model_id)  {
+       Some(_) => Ok(()),
+       None => Err(String::from("not exist yet")),
+   }?;
+    //pre-condition branch exists on database
+    match db_branch.query(branch_id)  {
+        Some(_) => Ok(()),
+        None => Err(String::from("not exist yet")),
+    }?;
+     //action
+     db.insert(item)?;
+     //post-condition
+     match db.query(id.clone()) {
+         Some(_) => Ok(()),
+         None => Err(String::from("not exist yet")),
+     }?;
+     Ok(())
+ }
 
     
 }
