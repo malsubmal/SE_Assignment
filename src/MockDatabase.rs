@@ -5,6 +5,7 @@ pub mod mockdb {
     }
 
     use std::collections::HashMap;
+    use std::collections::HashSet;
     use crate::customer::customer::Customer as Customer;
     use crate::rentalgroup::rentalgroup::RentalGroup as RentalGroup;
     use crate::branch::branch::Branch as Branch;
@@ -159,6 +160,36 @@ pub mod mockdb {
     
         pub fn insert(&mut self, rentalGroup : RentalGroup) -> Result<(), String> {
             self.db.insert(rentalGroup.getqueryfield().to_string(), rentalGroup);
+            Ok(())
+        } 
+    }
+
+    //MOCK  BRANCH NEIGHBOR DATABASE
+    pub struct BranchNeighborDatabase {
+        db : HashSet<(String, String)>,
+    }
+    
+    impl BranchNeighborDatabase {
+    
+        pub fn getSampleDB() -> BranchNeighborDatabase {
+            let mut db = HashSet::new();
+            //EMPTY BC HAHA HEHE
+/*             let c1 = (String::from("branchA"), String::from("branchB"));
+            db.insert(c1); */
+            BranchNeighborDatabase {
+                db,
+            }
+        }
+    
+        pub fn query(&self, (b1, b2) : (String, String)) -> Option<&(String, String)> {
+            match self.db.get(&(b1.clone(),b2.clone())) {
+                None => self.db.get(&(b2,b1)),
+                Some(val) => Some(val)
+            }  
+        }
+    
+        pub fn insert(&mut self, (b1, b2) :  (String, String)) -> Result<(), String> {
+            self.db.insert((b1, b2));
             Ok(())
         } 
     }

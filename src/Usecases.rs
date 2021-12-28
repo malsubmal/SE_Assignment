@@ -9,6 +9,45 @@ pub mod usescases {
     use crate::entity::entity::Queryable as Queryable;
 
 
+    pub fn sub_uc_querynewBranch(db : &mockdb::BranchDatabase, item_id : String)
+    -> Result<(), String> {
+       match db.query(item_id) {
+           Some(_) =>  Err(String::from("already exists")),
+           None => Ok(()),
+       }
+    }
+
+    pub fn sub_uc_queryoldBranch(db : &mockdb::BranchDatabase, item_id : String)
+    -> Result<(), String> {
+        match db.query(item_id) {
+            Some(_) => Ok(()),
+            None => Err(String::from("not exist yet")),
+        }
+    }
+
+    pub fn uc_addBranchNeighbor(b1: String, b2: String, db_branch : &mockdb::BranchDatabase, 
+    db_neighbor : &mut mockdb::BranchNeighborDatabase)
+    -> Result<(), String> {
+        //pre-condition : both branches exist
+        sub_uc_queryoldBranch(db_branch, b1.clone())?;
+        sub_uc_queryoldBranch(db_branch, b2.clone())?;
+        //pre-condition : neighboring not exist
+        match db_neighbor.query((b1.clone(),b2.clone())) {
+            Some(_) =>  Err(String::from("already exists")),
+            None => Ok(()),
+        }?;
+        //action
+        db_neighbor.insert((b1.clone(),b2.clone()))?;
+        //post-condition
+        match db_neighbor.query((b1.clone(),b2.clone())) {
+            Some(_) => Ok(()),
+            None => Err(String::from("not exist yet")),
+        }?;
+        Ok(())
+
+    }
+
+
 
 
     pub fn uc_createCustomer(db : &mut mockdb::CustomerDatabase, customer : Customer) -> Result<(), String> {
@@ -50,10 +89,7 @@ pub mod usescases {
     -> Result<(), String> {
        let id = item.getqueryfield().to_string();
        //pre-condition
-       match db.query(id.clone()) {
-           Some(_) =>  Err(String::from("already exists")),
-           None => Ok(()),
-       }?;
+       sub_uc_querynewBranch(db, id.clone())?;
        //action
        db.insert(item)?;
        //post-condition

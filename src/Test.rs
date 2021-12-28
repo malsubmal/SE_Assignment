@@ -198,4 +198,33 @@ pub mod test {
     }
 
 
+    //Add neighboring branches
+    #[test]
+    fn test_working_addneighbor() {
+        //CASE: YES
+        let db_branch = mockdb::BranchDatabase::getSampleDB();
+        let mut db_neighbor = mockdb::BranchNeighborDatabase::getSampleDB();
+        assert_eq!(uc::uc_addBranchNeighbor(String::from("branchA"), String::from("branchB"), &db_branch, &mut db_neighbor).is_ok()
+        , true);
+    }
+
+    #[test]
+    fn test_working_addneighbor_2() {
+        //CASE: Branch not exist yet
+        let db_branch = mockdb::BranchDatabase::getSampleDB();
+        let mut db_neighbor = mockdb::BranchNeighborDatabase::getSampleDB();
+        assert_eq!(uc::uc_addBranchNeighbor(String::from("branchC"), String::from("branchB"), &db_branch, &mut db_neighbor).is_ok()
+        , false);
+    }
+
+     #[test]
+    fn test_working_addneighbor_3() {
+        //CASE: neighboring already exists
+        let db_branch = mockdb::BranchDatabase::getSampleDB();
+        let mut db_neighbor = mockdb::BranchNeighborDatabase::getSampleDB();
+        uc::uc_addBranchNeighbor(String::from("branchA"), String::from("branchB"), &db_branch, &mut db_neighbor);        
+        assert_eq!(uc::uc_addBranchNeighbor(String::from("branchA"), String::from("branchB"), &db_branch, &mut db_neighbor).is_ok()
+        , false);
+    } 
+
 }
