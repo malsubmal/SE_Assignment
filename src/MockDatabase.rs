@@ -1,9 +1,5 @@
 pub mod mockdb {
 
-    pub struct SampleSystemDatabase {
-
-    }
-
     use std::collections::HashMap;
     use std::collections::HashSet;
     use crate::customer::customer::Customer as Customer;
@@ -14,6 +10,26 @@ pub mod mockdb {
     use crate::car::car::Car as Car;
     use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
+
+    pub trait MockDatabase {
+        type ID;
+        type Entity;
+        fn query(&self, id : Self::ID) -> Option<&Self::Entity>;
+        fn shouldExist(&self, id : Self::ID) -> Result<(), String> {
+            match self.query(id) {
+                Some(_) => Ok(()),
+                None => Err(String::from("not exist yet")),
+            }
+        }
+        fn shouldNotExist(&self, id : Self::ID)  -> Result<(), String> {
+            match self.query(id) {
+                Some(_) =>  Err(String::from("already exists")),
+                None => Ok(()),
+            }
+        }
+        fn insert(&mut self, entity : Self::Entity) -> Result<(), String>;
+
+    }
 
     pub enum Errors {
         POSTCONDITIONFAIL,
@@ -39,13 +55,17 @@ pub mod mockdb {
                 db,
             }
         }
-    
-        pub fn query(&self, id : String) -> Option<&Customer> {
+    }
+
+    impl MockDatabase for CustomerDatabase {
+        type ID = String;
+        type Entity = Customer;
+        fn query(&self, id : Self::ID) -> Option<&Self::Entity> {
             self.db.get(&id)
         }
     
-        pub fn insert(&mut self, customer : Customer) -> Result<(), String> {
-            self.db.insert(customer.getqueryfield().to_string(), customer);
+        fn insert(&mut self, entity : Self::Entity) -> Result<(), String> {
+            self.db.insert(entity.getqueryfield().to_string(), entity);
             Ok(())
         } 
     }
@@ -67,13 +87,17 @@ pub mod mockdb {
                 db,
             }
         }
-    
-        pub fn query(&self, id : String) -> Option<&Car> {
+    }
+
+    impl MockDatabase for CarDatabase {
+        type ID = String;
+        type Entity = Car;
+        fn query(&self, id : Self::ID) -> Option<&Self::Entity> {
             self.db.get(&id)
         }
     
-        pub fn insert(&mut self, car : Car) -> Result<(), String> {
-            self.db.insert(car.getqueryfield().to_string(), car);
+        fn insert(&mut self, entity : Self::Entity) -> Result<(), String> {
+            self.db.insert(entity.getqueryfield().to_string(), entity);
             Ok(())
         } 
     }
@@ -95,13 +119,17 @@ pub mod mockdb {
                 db,
             }
         }
+    }
     
-        pub fn query(&self, id : String) -> Option<&Branch> {
+    impl MockDatabase for BranchDatabase {
+        type ID = String;
+        type Entity = Branch;
+        fn query(&self, id : Self::ID) -> Option<&Self::Entity> {
             self.db.get(&id)
         }
     
-        pub fn insert(&mut self, branch : Branch) -> Result<(), String> {
-            self.db.insert(branch.getqueryfield().to_string(), branch);
+        fn insert(&mut self, entity : Self::Entity) -> Result<(), String> {
+            self.db.insert(entity.getqueryfield().to_string(), entity);
             Ok(())
         } 
     }
@@ -123,17 +151,19 @@ pub mod mockdb {
                 db,
             }
         }
-    
-        pub fn query(&self, id : String) -> Option<&Model> {
+    }
+    impl MockDatabase for ModelDatabase {
+        type ID = String;
+        type Entity = Model;
+        fn query(&self, id : Self::ID) -> Option<&Self::Entity> {
             self.db.get(&id)
         }
     
-        pub fn insert(&mut self, model : Model) -> Result<(), String> {
-            self.db.insert(model.getqueryfield().to_string(), model);
+        fn insert(&mut self, entity : Self::Entity) -> Result<(), String> {
+            self.db.insert(entity.getqueryfield().to_string(), entity);
             Ok(())
         } 
     }
-
 
     //MOCK RENTALGROUP DATABASE
     
@@ -154,19 +184,42 @@ pub mod mockdb {
             }
         }
     
-        pub fn query(&self, id : String) -> Option<&RentalGroup> {
+    }
+    impl MockDatabase for RentalGroupDatabase {
+        type ID = String;
+        type Entity = RentalGroup;
+        fn query(&self, id : Self::ID) -> Option<&Self::Entity> {
             self.db.get(&id)
         }
     
-        pub fn insert(&mut self, rentalGroup : RentalGroup) -> Result<(), String> {
-            self.db.insert(rentalGroup.getqueryfield().to_string(), rentalGroup);
+        fn insert(&mut self, entity : Self::Entity) -> Result<(), String> {
+            self.db.insert(entity.getqueryfield().to_string(), entity);
             Ok(())
         } 
     }
+    
 
     //MOCK  BRANCH NEIGHBOR DATABASE
     pub struct BranchNeighborDatabase {
         db : HashSet<(String, String)>,
+    }
+
+    impl MockDatabase for BranchNeighborDatabase {
+        type ID = (String, String);
+        type Entity = (String, String);
+
+        fn query(&self, id : Self::ID) -> Option<&Self::Entity> {
+            let (b1, b2) = id;
+            match self.db.get(&(b1.clone(),b2.clone())) {
+                None => self.db.get(&(b2,b1)),
+                Some(val) => Some(val)
+            }  
+        }
+    
+        fn insert(&mut self, entity : Self::Entity) -> Result<(), String> {
+            self.db.insert(entity);
+            Ok(())
+        } 
     }
     
     impl BranchNeighborDatabase {
@@ -174,24 +227,10 @@ pub mod mockdb {
         pub fn getSampleDB() -> BranchNeighborDatabase {
             let mut db = HashSet::new();
             //EMPTY BC HAHA HEHE
-/*             let c1 = (String::from("branchA"), String::from("branchB"));
-            db.insert(c1); */
             BranchNeighborDatabase {
                 db,
             }
         }
-    
-        pub fn query(&self, (b1, b2) : (String, String)) -> Option<&(String, String)> {
-            match self.db.get(&(b1.clone(),b2.clone())) {
-                None => self.db.get(&(b2,b1)),
-                Some(val) => Some(val)
-            }  
-        }
-    
-        pub fn insert(&mut self, (b1, b2) :  (String, String)) -> Result<(), String> {
-            self.db.insert((b1, b2));
-            Ok(())
-        } 
     }
 
 

@@ -4,6 +4,7 @@ pub mod test {
     use crate::branch::branch::Branch as Branch;
     use crate::model::model::Model as Model;
     use crate::car::car::Car as Car;
+    use crate::mockdatabase::mockdb::MockDatabase;
     use crate::mockdatabase::mockdb;
     use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;

@@ -4,66 +4,35 @@ pub mod usescases {
     use crate::branch::branch::Branch as Branch;
     use crate::model::model::Model as Model;
     use crate::car::car::Car as Car;
+    use crate::mockdatabase::mockdb::MockDatabase;
     use crate::mockdatabase::mockdb;
     use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
-
-
-    pub fn sub_uc_querynewBranch(db : &mockdb::BranchDatabase, item_id : String)
-    -> Result<(), String> {
-       match db.query(item_id) {
-           Some(_) =>  Err(String::from("already exists")),
-           None => Ok(()),
-       }
-    }
-
-    pub fn sub_uc_queryoldBranch(db : &mockdb::BranchDatabase, item_id : String)
-    -> Result<(), String> {
-        match db.query(item_id) {
-            Some(_) => Ok(()),
-            None => Err(String::from("not exist yet")),
-        }
-    }
 
     pub fn uc_addBranchNeighbor(b1: String, b2: String, db_branch : &mockdb::BranchDatabase, 
     db_neighbor : &mut mockdb::BranchNeighborDatabase)
     -> Result<(), String> {
         //pre-condition : both branches exist
-        sub_uc_queryoldBranch(db_branch, b1.clone())?;
-        sub_uc_queryoldBranch(db_branch, b2.clone())?;
+        db_branch.shouldExist(b1.clone())?;
+        db_branch.shouldExist(b2.clone())?;
         //pre-condition : neighboring not exist
-        match db_neighbor.query((b1.clone(),b2.clone())) {
-            Some(_) =>  Err(String::from("already exists")),
-            None => Ok(()),
-        }?;
+        db_neighbor.shouldNotExist((b1.clone(),b2.clone()))?;
         //action
         db_neighbor.insert((b1.clone(),b2.clone()))?;
         //post-condition
-        match db_neighbor.query((b1.clone(),b2.clone())) {
-            Some(_) => Ok(()),
-            None => Err(String::from("not exist yet")),
-        }?;
+        db_neighbor.shouldExist((b1.clone(),b2.clone()))?;
         Ok(())
 
     }
 
-
-
-
     pub fn uc_createCustomer(db : &mut mockdb::CustomerDatabase, customer : Customer) -> Result<(), String> {
         let customer_id = customer.getqueryfield().to_string();
         //pre-condition
-        match db.query(customer_id.clone()) {
-            Some(_) =>  Err(String::from("already exists")),
-            None => Ok(()),
-        }?;
+        db.shouldNotExist(customer_id.clone())?;
         //action
         db.insert(customer)?;
         //post-condition
-        match db.query(customer_id.clone()) {
-            Some(_) => Ok(()),
-            None => Err(String::from("not exist yet")),
-        }?;
+        db.shouldExist(customer_id.clone())?;
         Ok(())
     }
 
@@ -71,33 +40,24 @@ pub mod usescases {
      -> Result<(), String> {
         let id = item.getqueryfield().to_string();
         //pre-condition
-        match db.query(id.clone()) {
-            Some(_) =>  Err(String::from("already exists")),
-            None => Ok(()),
-        }?;
+        db.shouldNotExist(id.clone())?;
         //action
         db.insert(item)?;
         //post-condition
-        match db.query(id.clone()) {
-            Some(_) => Ok(()),
-            None => Err(String::from("not exist yet")),
-        }?;
+        db.shouldExist(id.clone())?;
         Ok(())
     }
 
     pub fn uc_createBranch(db : &mut mockdb::BranchDatabase, item : Branch)
     -> Result<(), String> {
-       let id = item.getqueryfield().to_string();
-       //pre-condition
-       sub_uc_querynewBranch(db, id.clone())?;
-       //action
-       db.insert(item)?;
-       //post-condition
-       match db.query(id.clone()) {
-           Some(_) => Ok(()),
-           None => Err(String::from("not exist yet")),
-       }?;
-       Ok(())
+        let id = item.getqueryfield().to_string();
+        //pre-condition
+        db.shouldNotExist(id.clone())?;
+        //action
+        db.insert(item)?;
+        //post-condition
+        db.shouldExist(id.clone())?;
+        Ok(())
    }
 
    pub fn uc_createModel(db : &mut mockdb::ModelDatabase, item : Model, db_support: &mockdb::RentalGroupDatabase)
@@ -105,22 +65,13 @@ pub mod usescases {
       let id = item.getqueryfield().to_string();
       let rg = item.getrentalgroup().to_string();
       //pre-condition id is new
-      match db.query(id.clone()) {
-          Some(_) =>  Err(String::from("already exists")),
-          None => Ok(()),
-      }?;
+      db.shouldNotExist(id.clone())?;
       //pre-condition ModelGroup exists on database
-      match db_support.query(rg)  {
-        Some(_) => Ok(()),
-        None => Err(String::from("not exist yet")),
-    }?;
+      db_support.shouldExist(rg)?;
       //action
       db.insert(item)?;
       //post-condition
-      match db.query(id.clone()) {
-          Some(_) => Ok(()),
-          None => Err(String::from("not exist yet")),
-      }?;
+      db.shouldExist(id.clone())?;
       Ok(())
   }
 
@@ -131,27 +82,15 @@ pub mod usescases {
      let model_id = item.getModel().to_string();
      let branch_id = item.getBranch().to_string();
      //pre-condition id is new
-     match db.query(id.clone()) {
-         Some(_) =>  Err(String::from("already exists")),
-         None => Ok(()),
-     }?;
+     db.shouldNotExist(id.clone())?;
      //pre-condition model exists on database
-     match db_model.query(model_id)  {
-       Some(_) => Ok(()),
-       None => Err(String::from("not exist yet")),
-   }?;
+     db_model.shouldExist(model_id)?;
     //pre-condition branch exists on database
-    match db_branch.query(branch_id)  {
-        Some(_) => Ok(()),
-        None => Err(String::from("not exist yet")),
-    }?;
+     db_branch.shouldExist(branch_id)?;
      //action
      db.insert(item)?;
      //post-condition
-     match db.query(id.clone()) {
-         Some(_) => Ok(()),
-         None => Err(String::from("not exist yet")),
-     }?;
+     db.shouldExist(id.clone())?;
      Ok(())
  }
 
@@ -167,15 +106,9 @@ pub mod usescases {
 
 
          //precondition branch exists
-        match db_branch.query(branch_id.clone()) {
-            Some(_) => Ok(()),
-            None => Err(String::from("not exist yet")),
-        }?;
-        //precondition model exists
-        match db_rentalgroup.query(rentalgroup_id.clone()) {
-            Some(_) => Ok(()),
-            None => Err(String::from("not exist yet")),
-        }?; 
+         db_branch.shouldExist(branch_id.clone())?;
+        //precondition rentalgroup exists
+        db_rentalgroup.shouldExist(rentalgroup_id.clone())?;
 
         let cars :Vec<Car> = db.db
                     .values()

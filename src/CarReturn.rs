@@ -4,8 +4,8 @@ pub mod carreturn {
     use crate::customer::customer::Customer as Customer;
 
     struct CarReturn {
-    car : Car,
-    customer : Customer,
+    car : String,
+    customer : String,
     daytime : String,
     }
 
