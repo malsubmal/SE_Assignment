@@ -1,6 +1,4 @@
 pub mod customer {
-use std::collections::HashMap;
-use crate::entity::entity::Creatable as Creatable;
 use crate::entity::entity::Queryable as Queryable;
 pub struct Customer {
 customername : String,
@@ -24,9 +22,6 @@ impl Queryable for Customer {
     }
 }
 
-impl Creatable for Customer {
-
-}
 
 
 

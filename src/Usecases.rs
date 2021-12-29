@@ -1,13 +1,35 @@
 pub mod usescases {
     use crate::customer::customer::Customer as Customer;
+    use std::ops::Deref;
     use crate::rentalgroup::rentalgroup::RentalGroup as RentalGroup;
     use crate::branch::branch::Branch as Branch;
     use crate::model::model::Model as Model;
     use crate::car::car::Car as Car;
     use crate::mockdatabase::mockdb::MockDatabase;
+    use crate::carreturn::carreturn::CarReturn as CarReturn;
+    use crate::car::car::RentalStatus as RentalStatus;
     use crate::mockdatabase::mockdb;
-    use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
+
+    pub fn uc_recordCarReturn(
+        car : String,
+        db_car : &mut mockdb::CarDatabase,
+        daytime : String
+    ) -> Result<(), String> {
+        let car_id = car.clone();
+        //pre-condition
+        db_car.shouldExist(car.clone())?;
+        //db_customer.shouldExist(customer.clone())?;
+        //maybe also check daytime not sure 
+        //let cr = CarReturn::new(car.clone(), customer, daytime).record()?;
+        db_car.queryMut(car).unwrap().returnCar();
+        //post-condition car status is now RETURNED
+        match db_car.query(car_id).unwrap().getRentalStatus() {
+            RentalStatus::RETURNED => Ok(()),
+            _ => Err(String::from("Error checking car rental status"))
+        }?;
+        Ok(())
+    }
 
     pub fn uc_addBranchNeighbor(b1: String, b2: String, db_branch : &mockdb::BranchDatabase, 
     db_neighbor : &mut mockdb::BranchNeighborDatabase)

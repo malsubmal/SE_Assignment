@@ -1,6 +1,4 @@
 pub mod model {
-    use std::collections::HashMap;
-    use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
         
     pub enum ModelType {
@@ -42,5 +40,4 @@ pub mod model {
         }
     }
     
-    impl Creatable for Model {}
 }

@@ -8,7 +8,6 @@ pub mod mockdb {
     use crate::model::model::Model as Model;
     use crate::model::model::ModelType as ModelType;
     use crate::car::car::Car as Car;
-    use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
 
     pub trait MockDatabase {
@@ -89,12 +88,19 @@ pub mod mockdb {
         }
     }
 
+    impl CarDatabase {
+        pub fn queryMut(&mut self,  id : String) -> Option<&mut Car> {
+            self.db.get_mut(&id)
+        }
+    }
+
     impl MockDatabase for CarDatabase {
         type ID = String;
         type Entity = Car;
         fn query(&self, id : Self::ID) -> Option<&Self::Entity> {
             self.db.get(&id)
         }
+        
     
         fn insert(&mut self, entity : Self::Entity) -> Result<(), String> {
             self.db.insert(entity.getqueryfield().to_string(), entity);

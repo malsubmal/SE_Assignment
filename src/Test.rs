@@ -6,7 +6,6 @@ pub mod test {
     use crate::car::car::Car as Car;
     use crate::mockdatabase::mockdb::MockDatabase;
     use crate::mockdatabase::mockdb;
-    use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
     use crate::usecases::usescases as uc;
     
@@ -225,6 +224,27 @@ pub mod test {
         let mut db_neighbor = mockdb::BranchNeighborDatabase::getSampleDB();
         uc::uc_addBranchNeighbor(String::from("branchA"), String::from("branchB"), &db_branch, &mut db_neighbor);        
         assert_eq!(uc::uc_addBranchNeighbor(String::from("branchA"), String::from("branchB"), &db_branch, &mut db_neighbor).is_ok()
+        , false);
+    } 
+
+    
+    #[test]
+    fn test_record_carreturn_1() {
+        //CASE: success
+        let car = String::from("carA");
+        let mut db_car = mockdb::CarDatabase::getSampleDB();
+        let daytime = String::from("daytimeA");       
+        assert_eq!(uc::uc_recordCarReturn(car, &mut db_car, daytime).is_ok()
+        , true);
+    } 
+    
+    #[test]
+    fn test_record_carreturn_2() {
+        //CASE: weird car
+        let car = String::from("carE");
+        let mut db_car = mockdb::CarDatabase::getSampleDB();
+        let daytime = String::from("daytimeA");       
+        assert_eq!(uc::uc_recordCarReturn(car, &mut db_car, daytime).is_ok()
         , false);
     } 
 

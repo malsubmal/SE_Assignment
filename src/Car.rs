@@ -1,19 +1,21 @@
 
 pub mod car {
-    use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
     use crate::model::model::Model as Model;
     use crate::branch::branch::Branch as Branch;
 
     #[derive(Clone)]
-    enum CarStatus {
+    pub enum RentalStatus {
         RENTREADY,
-        SERVICENEEDED,
         REMOVED,
         HELD,
         PICKEDUP,
         RETURNED,
         EXCEPTIONAL
+    }
+
+    enum MainternanceStatus {
+        SERVICENEEDED,
     }
     
     #[derive(Clone)]
@@ -23,7 +25,7 @@ pub mod car {
         yearofproduction : String,
         branch : String,
         color : String,
-        status : CarStatus,
+        status : RentalStatus,
         model : String,
     }
 
@@ -33,14 +35,14 @@ pub mod car {
             registrationnumber : String,
             branch : String,
             model : String,) -> Car {
-                let status = CarStatus::RENTREADY;
+                let status = RentalStatus::RENTREADY;
                 Car {
                     registrationnumber,
                     name : String::from("car-name"),
                     yearofproduction : String::from("2004"),
                     branch,
                     color : String::from("turquoise"),
-                    status : CarStatus::RENTREADY,
+                    status : RentalStatus::RENTREADY,
                     model,
                 }
         }
@@ -49,8 +51,16 @@ pub mod car {
             &self.branch
         }
 
+        pub fn getRentalStatus(&self) -> &RentalStatus {
+            &self.status
+        }
+
         pub fn getModel(&self) -> &String {
             &self.model
+        }
+
+        pub fn returnCar(&mut self) {
+            self.status = RentalStatus::RETURNED;
         }
     }
 
@@ -59,8 +69,6 @@ pub mod car {
             &self.registrationnumber
         }
     }
-
-    impl Creatable for Car {}
 
 
 

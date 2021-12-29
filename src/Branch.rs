@@ -1,6 +1,5 @@
 pub mod branch {
 use std::collections::HashMap;
-use crate::entity::entity::Creatable as Creatable;
 use crate::entity::entity::Queryable as Queryable;
 
     pub struct Branch {
@@ -25,6 +24,5 @@ use crate::entity::entity::Queryable as Queryable;
         }
     }
 
-    impl Creatable for Branch{}
 
 }

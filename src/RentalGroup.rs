@@ -1,6 +1,4 @@
 pub mod rentalgroup {
-    use std::collections::HashMap;
-    use crate::entity::entity::Creatable as Creatable;
     use crate::entity::entity::Queryable as Queryable;
     
     pub struct RentalGroup {
@@ -24,6 +22,5 @@ pub mod rentalgroup {
             &self.name
         }
     }
-    impl Creatable for RentalGroup {}
     
 }
