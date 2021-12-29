@@ -8,7 +8,7 @@
 ~6. Add a customer
 ~7. List cars that are available at a specified branch and belong to a specified rental
 group (do not include the cars at neighbor branches)
-8. Record the return of a car
+~8. Record the return of a car
 
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -20,5 +20,13 @@ NEED TO:
 
 - Usecases are in Usecases.rs
 - Tests are in Test.rs, run by cargo Test
+- create doc by cargo doc <recommended
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+For the purpose of this prototype:
+- Some fields and methods of some classes are omitted
+- A pseudo database operation is used (refer to MockDatabase.rs)
+- UC CarReturn is supposed to have its own database but alas :) only car rental status is recorded
+- Certain Classes' fields are also used as their id (refer to fn getqueryfield(&self) of each Class)
+
