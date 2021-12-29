@@ -1,4 +1,4 @@
- I KNOW THE CODE IS SMELLY MY BRAIN IS SMALL AND MY MORTAL COIL TIRED DO NOT TALK TO ME ABOUT IT
+I KNOW THE CODE IS SMELLY MY BRAIN IS SMALL AND MY MORTAL COIL TIRED DO NOT TALK TO ME ABOUT IT
 
 ~1. Add a branch
 ~2. Make a pair of branches neighbors to each other
@@ -29,4 +29,8 @@ For the purpose of this prototype:
 - A pseudo database operation is used (refer to MockDatabase.rs)
 - UC CarReturn is supposed to have its own database but alas :) only car rental status is recorded
 - Certain Classes' fields are also used as their id (refer to fn getqueryfield(&self) of each Class)
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+The source code is also at https://github.com/malsubmal/SE_Assignment
 
